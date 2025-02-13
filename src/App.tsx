@@ -28,6 +28,9 @@ function App() {
       {instruments.map((instrument) => (
         <li key={instrument.id}>{instrument.name}</li>
       ))}
+       {instruments.map((instrument) => (
+        <li key={instrument.id}>{instrument.name}</li>
+      ))}
     </ul>
   );
 }
