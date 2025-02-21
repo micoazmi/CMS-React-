@@ -56,7 +56,7 @@ export default function SignUp() {
     <div className="flex h-screen">
       {/* Logo */}
       <img
-        src="/react.svg"
+        src="/med.png"
         alt="Mediverse Logo"
         className="absolute top-6 left-6 w-32"
       />
@@ -114,8 +114,9 @@ export default function SignUp() {
 
       {/* Right Section - Image */}
       <div className="w-2/3 flex items-center justify-center bg-gradient-to-b from-purple-600 to-indigo-800 rounded-l-3xl">
+      <img src="/med.png" alt="Top Center Image" className="absolute top-6 w-48" />
         <div className="text-center">
-          <img src="/mediverse.png" alt="Healthcare Assistant" className="w-96 mx-auto" />
+          <img src="/doctor.svg" alt="Healthcare Assistant" className="w-96 mx-auto" />
           <h2 className="text-white text-2xl font-semibold mt-4">
             Your Personal Healthcare Assistant
           </h2>
