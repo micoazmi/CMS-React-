@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import PrivateRoute from "./routes/privateRoute.tsx";
@@ -14,7 +13,6 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         {/* Protect the "/" route */}
         <Route element={<PrivateRoute />}>
-          <Route path="/" element={<App />} />
           <Route path="/home" element={<Home />} />
         </Route>
 

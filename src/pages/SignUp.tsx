@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Button from "../component/Button";
+import InputField from "../component/InputField"; // Import InputField
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoMdArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase/supabase";
 
 export default function SignUp() {
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [registerForm, setRegisterForm] = useState({
     email: "",
     password: "",
@@ -16,22 +17,34 @@ export default function SignUp() {
 
   // Handle register
   const handleRegister = async () => {
-    setError(""); // Reset error before register
+    setErrors({}); // Reset errors before validation
+
+    // Basic validation
+    const newErrors: { email?: string; password?: string } = {};
+    if (!registerForm.email) newErrors.email = "Email tidak boleh kosong";
+    if (!registerForm.password) newErrors.password = "Kata sandi tidak boleh kosong";
+
+    // Jika ada error, set error state
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email: registerForm.email,
       password: registerForm.password,
     });
 
     if (error) {
-      setError(error.message);
+      setErrors({ email: "Gagal mendaftar. Email mungkin sudah digunakan." });
     } else {
       console.log("Register successful:", data);
-      navigate("/login"); // Redirect after register
+      navigate("/login"); // Redirect setelah register berhasil
     }
   };
 
   // Handle input change
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegisterForm({
       ...registerForm,
@@ -55,40 +68,29 @@ export default function SignUp() {
           Buat akun untuk mengelola dashboard Mediverse Anda
         </p>
 
-        {/* Error Message */}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
         {/* Email Input */}
-        <div className="w-full mb-4">
-          <label className="text-gray-700 font-medium">Email</label>
-          <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 mt-1">
-            <FaEnvelope className="text-gray-500 mr-2" />
-            <input
-              type="email"
-              name="email"
-              placeholder="Masukkan email"
-              className="w-full focus:outline-none"
-              value={registerForm.email}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
+        <InputField
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="Masukkan email"
+          value={registerForm.email}
+          onChange={handleChange}
+          icon={<FaEnvelope className="text-gray-500 mr-2" />}
+          error={errors.email} // Pass error state
+        />
 
         {/* Password Input */}
-        <div className="w-full mb-4">
-          <label className="text-gray-700 font-medium">Kata Sandi</label>
-          <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 mt-1">
-            <FaLock className="text-gray-500 mr-2" />
-            <input
-              type="password"
-              name="password"
-              placeholder="Masukkan kata sandi"
-              className="w-full focus:outline-none"
-              value={registerForm.password}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
+        <InputField
+          label="Kata Sandi"
+          type="password"
+          name="password"
+          placeholder="Masukkan kata sandi"
+          value={registerForm.password}
+          onChange={handleChange}
+          icon={<FaLock className="text-gray-500 mr-2" />}
+          error={errors.password} // Pass error state
+        />
 
         {/* Register Button */}
         <Button
