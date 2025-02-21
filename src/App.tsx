@@ -1,34 +1,54 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "./supabase/supabase";
 
-const supabase = createClient(
-  "https://ajebjltnqivmpnijkvee.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZWJqbHRucWl2bXBuaWprdmVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkzNjI0MDcsImV4cCI6MjA1NDkzODQwN30.rXzixNvhSBtAjH6aB_YVJrg0reZ3Azc08ZpXLhjSq-Q"
-);
-
-type Instrument = {
+type Doctor = {
   id: number;
   name: string;
+  specialization_id: number;
+  facility_id: number;
+};
+
+type location = {
+  id: number;
+  city: string;
+  street: string;
+  postal_code: number;
 };
 
 function App() {
-  const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [location, setlocation] = useState<location[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state
 
   useEffect(() => {
-    getInstruments();
+    fetchlocation();
   }, []);
 
-  async function getInstruments() {
-    const { data } = await supabase.from("instruments").select();
-    setInstruments(data || []); // Ensure `data` is an array
+  async function fetchlocation() {
+    setLoading(true); // Start loading
+    let { data: location, error } = await supabase.from("location").select("*");
+
+    if (error) {
+      console.error("Error fetching location:", error);
+      setError(error.message);
+    } else {
+      console.log("Fetched location:", location);
+      setlocation(location || []);
+    }
+    setLoading(false); // Stop loading
   }
 
   return (
-    <ul>
-      {instruments.map((instrument) => (
-        <li key={instrument.id}>{instrument.name}</li>
-      ))}
-    </ul>
+    <div>
+      <h1>location List</h1>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
+      <ul>
+        {location.map((el) => (
+          <li key={el.id}>{el.city}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
