@@ -65,6 +65,8 @@ export default function SignIn() {
               type="email"
               placeholder="Masukkan email"
               className="w-full focus:outline-none"
+              name="email"
+              value={loginForm.email}
               onChange={handleChange}
             />
           </div>
@@ -79,6 +81,8 @@ export default function SignIn() {
               type="password"
               placeholder="Masukkan kata sandi"
               className="w-full focus:outline-none"
+              name="password"
+              value={loginForm.password}
               onChange={handleChange}
             />
           </div>
