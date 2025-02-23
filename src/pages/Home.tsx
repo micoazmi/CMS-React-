@@ -31,14 +31,35 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold mb-4">Hello, {email || "User"}!</h1>
-      <button
-        onClick={handleSignOut}
-        className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
-      >
-        Sign Out
-      </button>
+    <div>
+      {/* Navbar */}
+      <nav className="bg-gray-800 p-4 text-white flex justify-between items-center">
+        <h1 className="text-xl font-bold">Mediverse</h1>
+        <div className="flex items-center gap-4">
+          {email ? (
+            <>
+              <span className="text-sm">{email}</span>
+              <button
+                onClick={handleSignOut}
+                className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-blue-500 px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              Login
+            </button>
+          )}
+        </div>
+      </nav>
+      {/* Page Content */}
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-3xl font-bold">Welcome to Mediverse!</h1>
+      </div>
     </div>
   );
 }
