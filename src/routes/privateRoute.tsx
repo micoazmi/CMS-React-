@@ -27,3 +27,28 @@ export default function PrivateRoute() {
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 }
+
+export function PublicRoute() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+
+    checkUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  if (isAuthenticated === null) return <p>Loading...</p>;
+
+  return isAuthenticated ? <Navigate to="/home" /> : <Outlet />;
+}
