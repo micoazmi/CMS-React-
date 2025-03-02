@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase/supabase";
 
-type Doctor = {
-  id: number;
-  name: string;
-  specialization_id: number;
-  facility_id: number;
-};
+
 
 type location = {
   id: number;
